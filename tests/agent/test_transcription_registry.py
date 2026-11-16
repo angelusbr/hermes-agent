@@ -9,7 +9,7 @@ Covers:
 - Case + whitespace insensitivity on lookup
 - ABC contract: default implementations work
 - ABC contract: transcribe() must be implemented
-- Sync invariant: registry built-ins match tools/transcription_tools.py
+- Sync invariant: registry built-ins match speech/transcription/transcriber.py
 """
 
 from __future__ import annotations
@@ -143,7 +143,7 @@ class TestABCContract:
 
 class TestBuiltinSync:
     """``_BUILTIN_NAMES`` in agent/transcription_registry.py is duplicated
-    from ``BUILTIN_STT_PROVIDERS`` in tools/transcription_tools.py
+    from ``BUILTIN_STT_PROVIDERS`` in speech/transcription/transcriber.py
     (importing directly would create a circular dependency). This test
     fails loudly if the two lists drift — a new built-in added to
     transcription_tools.py MUST also be added to
@@ -153,11 +153,11 @@ class TestBuiltinSync:
     """
 
     def test_registry_builtins_match_dispatcher_builtins(self):
-        from tools.transcription_tools import BUILTIN_STT_PROVIDERS
+        from speech.transcription.transcriber import BUILTIN_STT_PROVIDERS
 
         assert transcription_registry._BUILTIN_NAMES == BUILTIN_STT_PROVIDERS, (
             "agent.transcription_registry._BUILTIN_NAMES and "
-            "tools.transcription_tools.BUILTIN_STT_PROVIDERS have drifted!\n"
+            "speech.transcription.transcriber.BUILTIN_STT_PROVIDERS have drifted!\n"
             f"  Registry only: {sorted(transcription_registry._BUILTIN_NAMES - BUILTIN_STT_PROVIDERS)}\n"
             f"  Dispatcher only: {sorted(BUILTIN_STT_PROVIDERS - transcription_registry._BUILTIN_NAMES)}\n"
             "Add the missing names to whichever list is incomplete. "
